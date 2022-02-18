@@ -1,5 +1,6 @@
 package com.kakaopaysec.batch
 
+import com.kakaopaysec.batch.config.EnableBatchDomain
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 
+@EnableBatchDomain
 @EnableBatchProcessing
 @SpringBootApplication
 class BatchRunnerApplication(
@@ -39,6 +41,7 @@ class BatchRunnerApplication(
 fun main(args: Array<String>) {
     runApplication<BatchRunnerApplication>(*args)
 }
+
 
 
 

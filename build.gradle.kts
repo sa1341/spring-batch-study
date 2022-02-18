@@ -1,18 +1,17 @@
 plugins {
-	id("org.springframework.boot") version "2.5.9"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	kotlin("jvm") version "1.5.32"
-	kotlin("plugin.spring") version "1.5.32"
-	kotlin("plugin.jpa") version "1.5.32"
+	kotlin("jvm")
+	kotlin("plugin.spring")
+	kotlin("plugin.jpa") apply false
+	kotlin("kapt")
+	id("org.springframework.boot")
+	id("io.spring.dependency-management")
 }
 
 group = "com.kakaopaysec"
-version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 allprojects{
 	repositories {
-		jcenter()
+		mavenCentral()
 	}
 }
 
@@ -21,22 +20,24 @@ subprojects {
 	apply(plugin = "kotlin")
 	apply(plugin = "kotlin-spring")
 	apply(plugin = "kotlin-kapt")
+	apply(plugin = "maven")
 	apply(plugin = "org.springframework.boot")
 	apply(plugin = "io.spring.dependency-management")
 	apply(plugin = "kotlin-kapt")
 
 	dependencies {
-		implementation("org.jetbrains.kotlin:kotlin-reflect")
-		implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+		implementation(kotlin("stdlib-jdk8"))
+		implementation(kotlin("reflect"))
 		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-		implementation("org.springframework.boot:spring-boot-starter-batch")
-		implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-		runtimeOnly("com.h2database:h2")
-		testImplementation("org.springframework.batch:spring-batch-test")
+
+		implementation("org.springframework.boot:spring-boot-starter")
+		kapt("org.springframework.boot:spring-boot-configuration-processor")
+
 		testImplementation("org.springframework.boot:spring-boot-starter-test") {
 			exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
 		}
 	}
+
 
 	tasks.bootJar {
 		enabled = false
@@ -65,6 +66,11 @@ subprojects {
 		systemProperty("spring.profiles.active", "test")
 		maxHeapSize = "2g"
 	}
+
+	group = "com.kakaopaysec"
+	version = "0.0.1-SNAPSHOT"
+	java.sourceCompatibility = JavaVersion.VERSION_1_8
+
 }
 
 tasks.bootJar {
