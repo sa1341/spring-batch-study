@@ -38,7 +38,6 @@ subprojects {
 		}
 	}
 
-
 	tasks.bootJar {
 		enabled = false
 	}
