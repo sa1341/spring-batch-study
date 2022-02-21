@@ -28,7 +28,6 @@ class BatchRunnerApplication(
     @Autowired private val stepBuilderFactory: StepBuilderFactory
 ) {
 
-
     @Bean
     fun validator(): CompositeJobParametersValidator {
 
@@ -36,13 +35,13 @@ class BatchRunnerApplication(
 
         val defaultJobParametersValidator = DefaultJobParametersValidator()
 
-        defaultJobParametersValidator.setRequiredKeys(arrayOf<String>("filename"))
-        defaultJobParametersValidator.setOptionalKeys(arrayOf<String>("name"))
+        defaultJobParametersValidator.setRequiredKeys(arrayOf("fileName"))
+        defaultJobParametersValidator.setOptionalKeys(arrayOf("name"))
 
         defaultJobParametersValidator.afterPropertiesSet()
 
         validator.setValidators(
-            listOf(ParameterValidator(),defaultJobParametersValidator)
+            listOf(ParameterValidator(), defaultJobParametersValidator)
         )
 
         return validator
@@ -52,6 +51,7 @@ class BatchRunnerApplication(
     fun job(): Job {
         return this.jobBuilderFactory.get("job")
             .start(step1())
+            .validator(validator())
             .build()
     }
 

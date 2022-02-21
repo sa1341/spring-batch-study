@@ -8,7 +8,10 @@ import org.springframework.util.StringUtils
 class ParameterValidator: JobParametersValidator {
 
     override fun validate(parameters: JobParameters?) {
+
         val fileName = parameters?.getString("fileName")
+
+        println("ParameterValidator Start!")
 
         if (!StringUtils.hasText(fileName)) {
             throw JobParametersInvalidException("fileName parameter is missing")
