@@ -2,9 +2,14 @@ spring:
   main:
     allow-bean-definition-overriding: true
     web-application-type: NONE
+  batch:
+    initialize-schema: never
+  profiles:
+    include: local
 
 logging:
   level:
     ROOT: info
     org.hibernate.type.descriptor.sql.BasicBinder: trace
----
+
+

@@ -1,15 +1,18 @@
-package com.kakaopaysec.batch.config
+package com.kakaopaysec.batch.domain.config
 
 import com.kakaopaysec.batch.logger.logger
 import com.zaxxer.hikari.HikariConfig
-import org.springframework.beans.factory.annotation.Value
+import com.zaxxer.hikari.HikariDataSource
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.jdbc.DataSourceBuilder
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 import org.springframework.context.annotation.PropertySources
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing
 import org.springframework.stereotype.Component
 import java.util.TimeZone
+import javax.sql.DataSource
 
 @Configuration
 @EnableJpaAuditing
@@ -21,6 +24,19 @@ class BatchDataSourceConfig {
 
     init {
         initTimeZone()
+    }
+
+    @Bean
+    fun dataSource(
+        properties: BatchDataSourceProperties
+    ): DataSource {
+        return DataSourceBuilder.create()
+            .url(properties.jdbcUrl)
+            .driverClassName(properties.driverClassName)
+            .username(properties.username)
+            .password(properties.password)
+            .type(HikariDataSource::class.java)
+            .build()
     }
 
     @Component

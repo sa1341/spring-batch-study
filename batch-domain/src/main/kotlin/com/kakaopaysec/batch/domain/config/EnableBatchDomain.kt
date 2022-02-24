@@ -1,4 +1,4 @@
-package com.kakaopaysec.batch.config
+package com.kakaopaysec.batch.domain.config
 
 import org.springframework.context.annotation.Import
 import kotlin.annotation.AnnotationRetention.RUNTIME

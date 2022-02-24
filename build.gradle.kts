@@ -7,7 +7,7 @@ plugins {
 	id("io.spring.dependency-management")
 }
 
-group = "com.kakaopaysec"
+group = "com.kakaopaysec.batch"
 
 allprojects{
 	repositories {
@@ -66,7 +66,7 @@ subprojects {
 		maxHeapSize = "2g"
 	}
 
-	group = "com.kakaopaysec"
+	group = "com.kakaopaysec.batch"
 	version = "0.0.1-SNAPSHOT"
 	java.sourceCompatibility = JavaVersion.VERSION_1_8
 

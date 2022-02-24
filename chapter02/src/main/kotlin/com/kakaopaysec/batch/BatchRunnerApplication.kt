@@ -1,6 +1,6 @@
 package com.kakaopaysec.batch
 
-import com.kakaopaysec.batch.config.EnableBatchDomain
+import com.kakaopaysec.batch.domain.config.EnableBatchDomain
 import com.kakaopaysec.batch.validator.ParameterValidator
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
@@ -11,6 +11,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.job.CompositeJobParametersValidator
 import org.springframework.batch.core.job.DefaultJobParametersValidator
+import org.springframework.batch.core.launch.support.RunIdIncrementer
 import org.springframework.batch.core.scope.context.ChunkContext
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
@@ -33,10 +34,7 @@ class BatchRunnerApplication(
 
         val validator = CompositeJobParametersValidator()
 
-        val defaultJobParametersValidator = DefaultJobParametersValidator()
-
-        defaultJobParametersValidator.setRequiredKeys(arrayOf("fileName"))
-        defaultJobParametersValidator.setOptionalKeys(arrayOf("name"))
+        val defaultJobParametersValidator = DefaultJobParametersValidator(arrayOf("fileName"), arrayOf("name", "run.id"))
 
         defaultJobParametersValidator.afterPropertiesSet()
 
@@ -50,8 +48,9 @@ class BatchRunnerApplication(
     @Bean
     fun job(): Job {
         return this.jobBuilderFactory.get("job")
-            .start(step1())
             .validator(validator())
+            .start(step1())
+            .incrementer(RunIdIncrementer())
             .build()
     }
 

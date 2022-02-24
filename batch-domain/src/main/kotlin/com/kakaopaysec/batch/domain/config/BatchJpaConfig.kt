@@ -1,4 +1,4 @@
-package com.kakaopaysec.batch.config
+package com.kakaopaysec.batch.domain.config
 
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties
@@ -39,7 +39,6 @@ class BatchJpaConfig {
             )
             .packages(basePackages)
             .build()
-
     }
 
     @Bean
