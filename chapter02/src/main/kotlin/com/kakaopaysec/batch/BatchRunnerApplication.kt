@@ -11,7 +11,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.job.CompositeJobParametersValidator
 import org.springframework.batch.core.job.DefaultJobParametersValidator
-import org.springframework.batch.core.launch.support.RunIdIncrementer
 import org.springframework.batch.core.scope.context.ChunkContext
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
@@ -34,7 +33,7 @@ class BatchRunnerApplication(
 
         val validator = CompositeJobParametersValidator()
 
-        val defaultJobParametersValidator = DefaultJobParametersValidator(arrayOf("fileName"), arrayOf("name", "run.id"))
+        val defaultJobParametersValidator = DefaultJobParametersValidator(arrayOf("fileName"), arrayOf("name", "currentDate"))
 
         defaultJobParametersValidator.afterPropertiesSet()
 
@@ -48,9 +47,9 @@ class BatchRunnerApplication(
     @Bean
     fun job(): Job {
         return this.jobBuilderFactory.get("job")
-            .validator(validator())
             .start(step1())
-            .incrementer(RunIdIncrementer())
+            .validator(validator())
+            .incrementer(DailyJobTimestamper())
             .build()
     }
 
