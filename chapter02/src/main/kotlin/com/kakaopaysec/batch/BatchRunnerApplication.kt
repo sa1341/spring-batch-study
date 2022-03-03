@@ -12,6 +12,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.job.CompositeJobParametersValidator
 import org.springframework.batch.core.job.DefaultJobParametersValidator
+import org.springframework.batch.core.listener.JobListenerFactoryBean
 import org.springframework.batch.core.scope.context.ChunkContext
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
@@ -51,7 +52,8 @@ class BatchRunnerApplication(
             .start(step1())
             .validator(validator())
             .incrementer(DailyJobTimestamper())
-            .listener(JobLoggerListener())
+            .listener(JobListenerFactoryBean.getListener(
+                    JobLoggerListener()))
             .build()
     }
 
