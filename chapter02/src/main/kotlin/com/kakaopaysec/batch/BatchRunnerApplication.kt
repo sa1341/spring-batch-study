@@ -1,6 +1,7 @@
 package com.kakaopaysec.batch
 
 import com.kakaopaysec.batch.domain.config.EnableBatchDomain
+import com.kakaopaysec.batch.listener.JobLoggerListener
 import com.kakaopaysec.batch.validator.ParameterValidator
 import org.springframework.batch.core.Job
 import org.springframework.batch.core.Step
@@ -50,6 +51,7 @@ class BatchRunnerApplication(
             .start(step1())
             .validator(validator())
             .incrementer(DailyJobTimestamper())
+            .listener(JobLoggerListener())
             .build()
     }
 
