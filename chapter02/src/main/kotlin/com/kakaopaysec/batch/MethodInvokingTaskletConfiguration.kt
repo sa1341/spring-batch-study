@@ -7,8 +7,10 @@ import org.springframework.batch.core.Step
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
+import org.springframework.batch.core.configuration.annotation.StepScope
 import org.springframework.batch.core.step.tasklet.MethodInvokingTaskletAdapter
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -32,17 +34,19 @@ class MethodInvokingTaskletConfiguration(
     @Bean
     fun methodInvokingStep(): Step {
         return this.stepBuilderFactory.get("methodInvokingStep")
-            .tasklet(methodInvokingTasklet())
+            .tasklet(methodInvokingTasklet(null))
             .build()
     }
 
+    @StepScope
     @Bean
-    fun methodInvokingTasklet(): MethodInvokingTaskletAdapter {
+    fun methodInvokingTasklet(@Value("#{jobParameters['message']}") message: String?): MethodInvokingTaskletAdapter {
 
     val methodInvokingTaskletAdapter = MethodInvokingTaskletAdapter()
 
         methodInvokingTaskletAdapter.setTargetObject(customService())
         methodInvokingTaskletAdapter.setTargetMethod("serviceMethod")
+        methodInvokingTaskletAdapter.setArguments(arrayOf(message))
 
         return methodInvokingTaskletAdapter
     }

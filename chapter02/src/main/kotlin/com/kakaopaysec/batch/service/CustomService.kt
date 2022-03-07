@@ -1,5 +1,5 @@
 package com.kakaopaysec.batch.service
 
 class CustomService {
-    fun serviceMethod() = println("Service method was called")
+    fun serviceMethod(message: String) = println("$message")
 }

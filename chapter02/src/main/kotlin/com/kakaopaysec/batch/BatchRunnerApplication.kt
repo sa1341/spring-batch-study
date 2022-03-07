@@ -35,7 +35,7 @@ class BatchRunnerApplication(
 
         val validator = CompositeJobParametersValidator()
 
-        val defaultJobParametersValidator = DefaultJobParametersValidator(arrayOf("fileName"), arrayOf("name", "currentDate"))
+        val defaultJobParametersValidator = DefaultJobParametersValidator(arrayOf("fileName"), arrayOf("name", "currentDate", "message"))
 
         defaultJobParametersValidator.afterPropertiesSet()
 
