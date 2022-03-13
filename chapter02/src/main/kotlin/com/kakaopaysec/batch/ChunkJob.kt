@@ -7,6 +7,10 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory
 import org.springframework.batch.item.ItemWriter
 import org.springframework.batch.item.support.ListItemReader
+import org.springframework.batch.repeat.CompletionPolicy
+import org.springframework.batch.repeat.policy.CompositeCompletionPolicy
+import org.springframework.batch.repeat.policy.SimpleCompletionPolicy
+import org.springframework.batch.repeat.policy.TimeoutTerminationPolicy
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -31,7 +35,7 @@ class ChunkJob (
     @Bean
     fun chunkStep(): Step {
         return this.stepBuilderFactory.get("chunkStep")
-            .chunk<String, String>(1000)
+            .chunk<String, String>(completionPolicy())
             .reader(itemReader())
             .writer(itemWriter())
             .build()
@@ -53,9 +57,23 @@ class ChunkJob (
     fun itemWriter(): ItemWriter<String> {
         return ItemWriter { it ->
             it.forEach {
-                println(">> current item = ${it}")
+                println(">> current item = $it")
             }
         }
+    }
+
+    @Bean
+    fun completionPolicy(): CompletionPolicy {
+
+        val policy = CompositeCompletionPolicy()
+
+        val completionPolicies = arrayOf(
+            TimeoutTerminationPolicy(3),
+            SimpleCompletionPolicy(1000))
+
+        policy.setPolicies(completionPolicies)
+
+        return policy
     }
 }
 
