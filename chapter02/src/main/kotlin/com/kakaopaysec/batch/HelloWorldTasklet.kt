@@ -6,9 +6,8 @@ import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Value
 
+const val HELLO_WORLD = "Hello, %s"
 class HelloWorldTasklet: Tasklet {
-
-    private val HELLO_WORLD = "Hello, %s"
 
     @Value("#{jobParameters['name']}")
     private val name: String? = null

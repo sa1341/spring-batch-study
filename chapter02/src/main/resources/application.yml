@@ -4,6 +4,9 @@ spring:
     web-application-type: NONE
   batch:
     initialize-schema: never
+    job:
+     # enabled: false
+      names: ${job.name:NONE}
   profiles:
     include: local
 

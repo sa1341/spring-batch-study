@@ -16,7 +16,6 @@ import org.springframework.batch.core.listener.JobListenerFactoryBean
 import org.springframework.batch.core.scope.context.ChunkContext
 import org.springframework.batch.core.step.tasklet.Tasklet
 import org.springframework.batch.repeat.RepeatStatus
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -26,8 +25,8 @@ import org.springframework.context.annotation.Bean
 @EnableBatchProcessing
 @SpringBootApplication
 class BatchRunnerApplication(
-    @Autowired private val jobBuilderFactory: JobBuilderFactory,
-    @Autowired private val stepBuilderFactory: StepBuilderFactory
+    private val jobBuilderFactory: JobBuilderFactory,
+    private val stepBuilderFactory: StepBuilderFactory
 ) {
 
     @Bean
@@ -35,7 +34,8 @@ class BatchRunnerApplication(
 
         val validator = CompositeJobParametersValidator()
 
-        val defaultJobParametersValidator = DefaultJobParametersValidator(arrayOf("fileName"), arrayOf("name", "currentDate", "message"))
+        val defaultJobParametersValidator =
+            DefaultJobParametersValidator(arrayOf("fileName"), arrayOf("name", "currentDate", "message"))
 
         defaultJobParametersValidator.afterPropertiesSet()
 
@@ -48,12 +48,11 @@ class BatchRunnerApplication(
 
     @Bean
     fun job(): Job {
-        return this.jobBuilderFactory.get("job")
+        return this.jobBuilderFactory.get("simpleJob")
             .start(step1())
             .validator(validator())
             .incrementer(DailyJobTimestamper())
-            .listener(JobListenerFactoryBean.getListener(
-                    JobLoggerListener()))
+            .listener(JobListenerFactoryBean.getListener(JobLoggerListener()))
             .build()
     }
 
